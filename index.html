@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ViziBoost - Ver Video</title>
+    <link rel="stylesheet" href="https://cdn.plyr.io/3.6.8/plyr.css" />
+    <style>
+        body {
+            background-color: #121212;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            text-align: center;
+        }
+        #videoContainer {
+            width: 90%;
+            max-width: 500px;
+        }
+        .adContainer {
+            margin-top: 20px;
+        }
+        #errorMessage {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="videoContainer">
+        <video id="videoPlayer" controls crossorigin>
+            <source id="videoSource" src="" type="video/mp4">
+        </video>
+        <p id="errorMessage"></p>
+        <div class="adContainer">
+            <div id="interstitialAd"></div>
+            <div id="popunderAd"></div>
+            <div id="bannerAd"></div>
+            <div id="socialBar"></div>
+        </div>
+    </div>
+
+    <script src="https://cdn.plyr.io/3.6.8/plyr.polyfilled.js"></script>
+    <script>
+        const player = new Plyr('#videoPlayer');
+
+        function getParameterByName(name) {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get(name);
+        }
+
+        const videoUrl = getParameterByName('url');
+        const interstitialCode = getParameterByName('interstitialCode');
+        const popunderCode = getParameterByName('popunderCode');
+        const bannerCode = getParameterByName('bannerCode');
+        const socialBarCode = getParameterByName('socialBarCode');
+
+        const videoPlayer = document.getElementById('videoPlayer');
+        const videoSource = document.getElementById('videoSource');
+        const errorMessage = document.getElementById('errorMessage');
+
+        if (videoUrl) {
+            videoSource.src = videoUrl;
+            player.source = {
+                type: 'video',
+                sources: [{
+                    src: videoUrl,
+                    type: 'video/mp4'
+                }]
+            };
+
+            // Opcional: abrir un popunder cuando el video termina
+            videoPlayer.addEventListener('ended', function() {
+                window.open("https://toopsoug.net/4/9062472?var={your_source_id}", '_blank', 'noreferrer,noopener');
+            });
+        } else {
+            errorMessage.innerHTML = "Error: No se proporcionó la URL del video.";
+        }
+
+        // Insertar los códigos de anuncios si están disponibles
+        if (interstitialCode) {
+            document.getElementById('interstitialAd').innerHTML = interstitialCode;
+        }
+        if (popunderCode) {
+            document.getElementById('popunderAd').innerHTML = popunderCode;
+        }
+        if (bannerCode) {
+            document.getElementById('bannerAd').innerHTML = bannerCode;
+        }
+        if (socialBarCode) {
+            document.getElementById('socialBar').innerHTML = socialBarCode;
+        }
+    </script>
+
+</body>
+</html>
