@@ -64,18 +64,20 @@
             alert("No se encontró el video.");
         }
 
-        // Popunder con Direct Link
-        let canOpenPopunder = true; // Controla si se puede abrir el popunder
+        // Popunder con Direct Link (solo si hay un Direct Link válido)
+        if (directLink && directLink !== "null" && directLink.trim() !== "") {
+            let canOpenPopunder = true; // Controla si se puede abrir el popunder
 
-        function openPopunder() {
-            if (canOpenPopunder && directLink) {
-                window.open(directLink, '_blank', 'noopener,noreferrer');
-                canOpenPopunder = false; // Desactiva el popunder momentáneamente
-                setTimeout(() => { canOpenPopunder = true; }, 3000); // Reactiva después de 3s
+            function openPopunder() {
+                if (canOpenPopunder) {
+                    window.open(directLink, '_blank', 'noopener,noreferrer');
+                    canOpenPopunder = false; // Desactiva el popunder momentáneamente
+                    setTimeout(() => { canOpenPopunder = true; }, 3000); // Reactiva después de 3s
+                }
             }
-        }
 
-        document.addEventListener('click', openPopunder);
+            document.addEventListener('click', openPopunder);
+        }
     </script>
 
 </body>
