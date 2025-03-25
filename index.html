@@ -6,11 +6,20 @@
     <title>ViziBoost - Ver Video</title>
     <link rel="stylesheet" href="https://cdn.plyr.io/3.7.8/plyr.css">
     <style>
-        body {
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
             font-family: Arial, sans-serif;
-            margin: 20px;
-            background-color: #e3f2fd; /* Fondo suave azul claro */
-            color: #333; /* Color de texto */
+        }
+        body {
+            background-color: #e3f2fd; /* Fondo azul claro como la página de generar URL */
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            padding: 20px;
         }
         .container {
             width: 90%;
@@ -21,15 +30,12 @@
             box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
         }
         h2 {
-            color: #1976d2; /* Azul más oscuro para los encabezados */
+            color: #1976d2; /* Azul oscuro */
             margin-bottom: 15px;
         }
         video {
             width: 100%;
             border-radius: 10px;
-        }
-        #errorMessage {
-            color: red;
         }
     </style>
 </head>
@@ -39,10 +45,7 @@
         <h2>ViziBoost - Ver Video</h2>
 
         <!-- Reproductor de Video -->
-        <video id="videoPlayer" controls crossorigin>
-            <source id="videoSource" src="" type="video/mp4">
-        </video>
-        <p id="errorMessage"></p>
+        <video id="videoPlayer" controls></video>
     </div>
 
     <script src="https://cdn.plyr.io/3.7.8/plyr.js"></script>
@@ -52,39 +55,26 @@
         const videoUrl = urlParams.get("url");
         const directLink = decodeURIComponent(urlParams.get("directLink") || "");
 
-        // Inicializar Plyr
-        const videoPlayer = document.getElementById("videoPlayer");
-        const player = new Plyr(videoPlayer); // Inicializar Plyr
-
         // Cargar el video
         if (videoUrl) {
-            // Asignar la fuente del video
-            player.source = {
-                type: 'video',
-                sources: [{
-                    src: videoUrl,
-                    type: 'video/mp4'
-                }]
-            };
+            const videoPlayer = document.getElementById("videoPlayer");
+            videoPlayer.src = videoUrl;
+            new Plyr(videoPlayer); // Inicializa Plyr
         } else {
-            document.getElementById("errorMessage").innerHTML = "Error: No se encontró el video.";
+            alert("No se encontró el video.");
         }
 
-        // Configuración del popunder
-        let canOpenPopunder = true; // Controlar si se puede abrir el popunder
+        // Popunder con Direct Link
+        let canOpenPopunder = true; // Controla si se puede abrir el popunder
 
-        // Función para abrir el popunder
         function openPopunder() {
-            if (canOpenPopunder) {
+            if (canOpenPopunder && directLink) {
                 window.open(directLink, '_blank', 'noopener,noreferrer');
-                canOpenPopunder = false; // Deshabilitar el popunder temporalmente
-                setTimeout(() => {
-                    canOpenPopunder = true; // Habilitar nuevamente después de 3 segundos
-                }, 3000);
+                canOpenPopunder = false; // Desactiva el popunder momentáneamente
+                setTimeout(() => { canOpenPopunder = true; }, 3000); // Reactiva después de 3s
             }
         }
 
-        // Event listener para abrir el popunder al hacer clic
         document.addEventListener('click', openPopunder);
     </script>
 
