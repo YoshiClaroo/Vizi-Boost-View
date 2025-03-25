@@ -54,7 +54,10 @@
         <div id="interstitialAd" class="ad-container"></div>
 
         <!-- Reproductor de Video -->
-        <video id="videoPlayer" controls></video>
+        <video id="videoPlayer" controls crossorigin>
+            <source id="videoSource" src="" type="video/mp4">
+        </video>
+        <p id="errorMessage"></p>
 
         <!-- Anuncios Adicionales -->
         <div id="popunderAd" class="ad-container"></div>
