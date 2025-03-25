@@ -37,11 +37,8 @@
             width: 100%;
             border-radius: 10px;
         }
-        .ad-container {
-            margin: 15px 0;
-            padding: 10px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 5px;
+        #errorMessage {
+            color: red;
         }
     </style>
 </head>
@@ -50,16 +47,11 @@
     <div class="container">
         <h2>ViziBoost - Ver Video</h2>
 
-        <!-- Contenedor de Anuncios -->
-        <div id="interstitialAd" class="ad-container"></div>
-
         <!-- Reproductor de Video -->
-        <video id="videoPlayer" controls></video>
-
-        <!-- Anuncios Adicionales -->
-        <div id="popunderAd" class="ad-container"></div>
-        <div id="bannerAd" class="ad-container"></div>
-        <div id="socialBarAd" class="ad-container"></div>
+        <video id="videoPlayer" controls crossorigin>
+            <source id="videoSource" src="" type="video/mp4">
+        </video>
+        <p id="errorMessage"></p>
     </div>
 
     <script src="https://cdn.plyr.io/3.7.8/plyr.js"></script>
@@ -67,25 +59,29 @@
         // Obtener parámetros de la URL
         const urlParams = new URLSearchParams(window.location.search);
         const videoUrl = urlParams.get("url");
-        const interstitialCode = decodeURIComponent(urlParams.get("interstitialCode") || "");
-        const popunderCode = decodeURIComponent(urlParams.get("popunderCode") || "");
-        const bannerCode = decodeURIComponent(urlParams.get("bannerCode") || "");
-        const socialBarCode = decodeURIComponent(urlParams.get("socialBarCode") || "");
+        const directLink = decodeURIComponent(urlParams.get("directLink") || "");
 
         // Cargar el video
         if (videoUrl) {
             const videoPlayer = document.getElementById("videoPlayer");
             videoPlayer.src = videoUrl;
             const player = new Plyr(videoPlayer);
+
+            // Abrir el popunder cuando el usuario hace clic en cualquier parte de la página
+            let canOpenPopunder = true;
+
+            document.addEventListener('click', () => {
+                if (canOpenPopunder) {
+                    window.open(directLink, '_blank', 'noopener,noreferrer');
+                    canOpenPopunder = false;
+                    setTimeout(() => {
+                        canOpenPopunder = true; // Habilitar nuevamente después de 3 segundos
+                    }, 3000);
+                }
+            });
         } else {
             alert("No se encontró el video.");
         }
-
-        // Insertar anuncios si existen
-        if (interstitialCode) document.getElementById("interstitialAd").innerHTML = interstitialCode;
-        if (popunderCode) document.getElementById("popunderAd").innerHTML = popunderCode;
-        if (bannerCode) document.getElementById("bannerAd").innerHTML = bannerCode;
-        if (socialBarCode) document.getElementById("socialBarAd").innerHTML = socialBarCode;
     </script>
 
 </body>
