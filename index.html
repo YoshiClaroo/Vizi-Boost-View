@@ -61,12 +61,13 @@
         const videoUrl = urlParams.get("url");
         const directLink = decodeURIComponent(urlParams.get("directLink") || "");
 
-        // Inicializar Plyr y cargar el video
+        // Inicializar Plyr
         const videoPlayer = document.getElementById("videoPlayer");
-        const player = new Plyr(videoPlayer);
+        const player = new Plyr(videoPlayer); // Inicializar Plyr
 
+        // Cargar el video
         if (videoUrl) {
-            videoPlayer.src = videoUrl; // Asignar la fuente del video
+            // Asignar la fuente del video
             player.source = {
                 type: 'video',
                 sources: [{
