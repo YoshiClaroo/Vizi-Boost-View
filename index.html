@@ -62,10 +62,18 @@
         const directLink = decodeURIComponent(urlParams.get("directLink") || "");
 
         // Cargar el video
+        const videoPlayer = document.getElementById("videoPlayer");
+        const player = new Plyr(videoPlayer); // Inicializar Plyr
+
         if (videoUrl) {
-            const videoPlayer = document.getElementById("videoPlayer");
-            videoPlayer.src = videoUrl;
-            const player = new Plyr(videoPlayer);
+            videoPlayer.src = videoUrl; // Asignar la fuente del video
+            player.source = { // Configurar Plyr
+                type: 'video',
+                sources: [{
+                    src: videoUrl,
+                    type: 'video/mp4'
+                }]
+            };
         } else {
             document.getElementById("errorMessage").innerHTML = "Error: No se encontró el video.";
         }
