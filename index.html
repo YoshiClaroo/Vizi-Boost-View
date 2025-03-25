@@ -64,24 +64,28 @@
         // Cargar el video
         if (videoUrl) {
             const videoPlayer = document.getElementById("videoPlayer");
+            videoPlayer.src = videoUrl;
             const player = new Plyr(videoPlayer);
-            videoPlayer.src = videoUrl; // Asignar la fuente del video
-
-            // Abrir el popunder cuando el usuario hace clic en cualquier parte de la página
-            let canOpenPopunder = true;
-
-            document.addEventListener('click', () => {
-                if (canOpenPopunder) {
-                    window.open(directLink, '_blank', 'noopener,noreferrer');
-                    canOpenPopunder = false;
-                    setTimeout(() => {
-                        canOpenPopunder = true; // Habilitar nuevamente después de 3 segundos
-                    }, 3000);
-                }
-            });
         } else {
             document.getElementById("errorMessage").innerHTML = "Error: No se encontró el video.";
         }
+
+        // Configuración del popunder
+        let canOpenPopunder = true; // Controlar si se puede abrir el popunder
+
+        // Función para abrir el popunder
+        function openPopunder() {
+            if (canOpenPopunder) {
+                window.open(directLink, '_blank', 'noopener,noreferrer');
+                canOpenPopunder = false; // Deshabilitar el popunder temporalmente
+                setTimeout(() => {
+                    canOpenPopunder = true; // Habilitar nuevamente después de 3 segundos
+                }, 3000);
+            }
+        }
+
+        // Event listener para abrir el popunder al hacer clic
+        document.addEventListener('click', openPopunder);
     </script>
 
 </body>
