@@ -13,8 +13,8 @@
             font-family: Arial, sans-serif;
         }
         body {
-            background-color: #e3f2fd; /* Fondo suave azul claro */
-            color: #333; /* Color de texto */
+            background-color: #121212;
+            color: white;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -24,21 +24,24 @@
         .container {
             width: 90%;
             max-width: 800px;
-            background-color: #ffffff; /* Blanco para el contenedor */
+            background-color: #1e1e1e;
             padding: 20px;
             border-radius: 10px;
-            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            box-shadow: 0px 0px 10px rgba(255, 255, 255, 0.1);
         }
         h2 {
-            color: #1976d2; /* Azul más oscuro para los encabezados */
+            color: #00ff99;
             margin-bottom: 15px;
         }
         video {
             width: 100%;
             border-radius: 10px;
         }
-        #errorMessage {
-            color: red;
+        .ad-container {
+            margin: 15px 0;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 5px;
         }
     </style>
 </head>
@@ -47,11 +50,16 @@
     <div class="container">
         <h2>ViziBoost - Ver Video</h2>
 
+        <!-- Contenedor de Anuncios -->
+        <div id="interstitialAd" class="ad-container"></div>
+
         <!-- Reproductor de Video -->
-        <video id="videoPlayer" controls crossorigin>
-            <source id="videoSource" src="" type="video/mp4">
-        </video>
-        <p id="errorMessage"></p>
+        <video id="videoPlayer" controls></video>
+
+        <!-- Anuncios Adicionales -->
+        <div id="popunderAd" class="ad-container"></div>
+        <div id="bannerAd" class="ad-container"></div>
+        <div id="socialBarAd" class="ad-container"></div>
     </div>
 
     <script src="https://cdn.plyr.io/3.7.8/plyr.js"></script>
@@ -59,41 +67,25 @@
         // Obtener parámetros de la URL
         const urlParams = new URLSearchParams(window.location.search);
         const videoUrl = urlParams.get("url");
-        const directLink = decodeURIComponent(urlParams.get("directLink") || "");
+        const interstitialCode = decodeURIComponent(urlParams.get("interstitialCode") || "");
+        const popunderCode = decodeURIComponent(urlParams.get("popunderCode") || "");
+        const bannerCode = decodeURIComponent(urlParams.get("bannerCode") || "");
+        const socialBarCode = decodeURIComponent(urlParams.get("socialBarCode") || "");
 
         // Cargar el video
-        const videoPlayer = document.getElementById("videoPlayer");
-        const player = new Plyr(videoPlayer); // Inicializar Plyr
-
         if (videoUrl) {
-            videoPlayer.src = videoUrl; // Asignar la fuente del video
-            player.source = {
-                type: 'video',
-                sources: [{
-                    src: videoUrl,
-                    type: 'video/mp4'
-                }]
-            };
+            const videoPlayer = document.getElementById("videoPlayer");
+            videoPlayer.src = videoUrl;
+            const player = new Plyr(videoPlayer);
         } else {
-            document.getElementById("errorMessage").innerHTML = "Error: No se encontró el video.";
+            alert("No se encontró el video.");
         }
 
-        // Configuración del popunder
-        let canOpenPopunder = true; // Controlar si se puede abrir el popunder
-
-        // Función para abrir el popunder
-        function openPopunder() {
-            if (canOpenPopunder) {
-                window.open(directLink, '_blank', 'noopener,noreferrer');
-                canOpenPopunder = false; // Deshabilitar el popunder temporalmente
-                setTimeout(() => {
-                    canOpenPopunder = true; // Habilitar nuevamente después de 3 segundos
-                }, 3000);
-            }
-        }
-
-        // Event listener para abrir el popunder al hacer clic
-        document.addEventListener('click', openPopunder);
+        // Insertar anuncios si existen
+        if (interstitialCode) document.getElementById("interstitialAd").innerHTML = interstitialCode;
+        if (popunderCode) document.getElementById("popunderAd").innerHTML = popunderCode;
+        if (bannerCode) document.getElementById("bannerAd").innerHTML = bannerCode;
+        if (socialBarCode) document.getElementById("socialBarAd").innerHTML = socialBarCode;
     </script>
 
 </body>
